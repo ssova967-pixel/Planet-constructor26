@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор обитаемых планет</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Конструктор обитаемых планет</h1>
+
+        <!-- Панель параметров -->
+        <section class="controls">
+            <h2>Параметры планеты</h2>
+
+            <!-- ===== Готовые планеты ===== -->
+            <div class="param preset">
+                <label for="presetSelect">Готовые планеты</label>
+                <select id="presetSelect">
+                    <option value="">— свой вариант —</option>
+                    <optgroup label="Реальные миры">
+                        <option value="earth">Земля</option>
+                        <option value="moon">Луна</option>
+                        <option value="mars">Марс</option>
+                        <option value="venus">Венера</option>
+                        <option value="titan">Титан</option>
+                        <option value="ganymede">Ганимед</option>
+                        <option value="trappist">TRAPPIST-1e</option>
+                    </optgroup>
+                    <optgroup label="Из фантастики">
+                        <option value="coruscant">Корусант</option>
+                        <option value="tatooine">Татуин</option>
+                        <option value="terra">Святая Терра</option>
+                        <option value="cadia">Кадия</option>
+                    </optgroup>
+                </select>
+                <p id="presetNote" class="computed"></p>
+            </div>
+
+            <!-- ===== Звезда и орбита ===== -->
+            <h3>Звезда и орбита</h3>
+
+            <div class="param">
+                <label for="starType">Тип звезды</label>
+                <select id="starType">
+                    <option value="ultracool">Ультрахолодный карлик (как TRAPPIST-1)</option>
+                    <option value="red">Красный карлик</option>
+                    <option value="orange">Оранжевый карлик</option>
+                    <option value="yellow" selected>Жёлтый карлик (как Солнце)</option>
+                    <option value="blue">Голубой гигант</option>
+                </select>
+            </div>
+
+            <div class="param">
+                <label for="distance">Расстояние до звезды</label>
+                <input id="distance" type="range" min="0" max="100" step="0.1" value="50">
+                <p>Расстояние: <span id="distanceValue">1.00</span> а. е.</p>
+                <p class="computed">Расчётная температура поверхности:
+                    <strong><span id="temperatureValue">15</span> °C</strong></p>
+            </div>
+
+            <div class="param">
+                <label>
+                    <input type="checkbox" id="hasMoon" checked>
+                    Есть крупный спутник
+                </label>
+            </div>
+
+            <!-- ===== Поверхность и атмосфера ===== -->
+            <h3>Поверхность и атмосфера</h3>
+
+            <div class="param">
+                <label for="oceans">Доля поверхности, покрытая океанами</label>
+                <input id="oceans" type="range" min="0" max="100" step="1" value="70">
+                <p>Океаны: <span id="oceansValue">70</span> %</p>
+            </div>
+
+            <div class="param">
+                <label for="atmosphere">Атмосферное давление (от Земли)</label>
+                <input id="atmosphere" type="range" min="0" max="100" step="0.1" value="60">
+                <p>Давление: <span id="atmosphereValue">1.0</span> атм</p>
+            </div>
+
+            <div class="param">
+                <label for="oxygen">Содержание кислорода в атмосфере</label>
+                <input id="oxygen" type="range" min="0" max="400" step="1" value="210">
+                <p>Кислород: <span id="oxygenValue">21.0</span> %</p>
+            </div>
+
+            <div class="param">
+                <label for="gravity">Сила тяжести (от Земли)</label>
+                <input id="gravity" type="range" min="5" max="300" step="1" value="100">
+                <p>Гравитация: <span id="gravityValue">1.0</span> g</p>
+            </div>
+
+            <!-- ===== Защита и излучение ===== -->
+            <h3>Защита и излучение</h3>
+
+            <div class="param">
+                <label>
+                    <input type="checkbox" id="hasMagneticField" checked>
+                    Есть магнитное поле
+                </label>
+            </div>
+
+            <div class="param">
+                <label for="radiation">Фоновая радиация в районе орбиты (от Земли)</label>
+                <input id="radiation" type="range" min="0" max="100" step="1" value="10">
+                <p>Радиация: <span id="radiationValue">1.0</span> ×</p>
+            </div>
+        </section>
+
+        <!-- Результат -->
+        <section class="result">
+            <h2>Результат</h2>
+            <div id="planetVisual" class="planet"></div>
+            <div class="score">
+                Пригодность: <span id="habitabilityScore">0</span>%
+            </div>
+            <p id="verdict">Настройте параметры</p>
+            <ul id="details"></ul>
+        </section>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
