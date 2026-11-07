@@ -29,6 +29,7 @@ const scoreEl = $("habitabilityScore");
 const verdictEl = $("verdict");
 const detailsEl = $("details");
 const planetVisual = $("planetVisual");
+const planetImage = $("planetImage");
 
 // ===== Типы звёзд =====
 // lum       — светимость относительно Солнца
@@ -69,36 +70,80 @@ function fmt(v) {
 const FICTION_NOTE = " Значения приблизительные: точных данных в первоисточниках мало.";
 const PRESETS = {
     earth: { star: "yellow", dist: 1, moon: true, ocean: 71, pressure: 1, o2: 21, g: 1, mag: true, rad: 1,
-        note: "Эталон: все параметры в комфортной зоне." },
+        note: "Эталон: все параметры в комфортной зоне.",
+        img: "images/Earth.jpg" },
     moon: { star: "yellow", dist: 1, moon: false, ocean: 0, pressure: 0, o2: 0, g: 0.165, mag: false, rad: 1,
-        note: "Нет атмосферы и воды. Расчёт даёт среднюю температуру, а реально днём до +120 °C, ночью до −170 °C." },
+        note: "Нет атмосферы и воды. Расчёт даёт среднюю температуру, а реально днём до +120 °C, ночью до −170 °C.",
+        img: "images/Moon.jpg" },
     mars: { star: "yellow", dist: 1.524, moon: false, ocean: 0, pressure: 0.006, o2: 0.13, g: 0.38, mag: false, rad: 1,
-        note: "Очень тонкая атмосфера (около 0,006 атм) и нет глобального магнитного поля." },
+        note: "Очень тонкая атмосфера (около 0,006 атм) и нет глобального магнитного поля.",
+        img: "images/Mars.jpg" },
     venus: { star: "yellow", dist: 0.723, moon: false, ocean: 0, pressure: 92, o2: 0, g: 0.9, mag: false, rad: 1,
-        note: "Давление около 92 атм и сильный парниковый эффект. Реально там около 460 °C, наша упрощённая формула занижает." },
+        note: "Давление около 92 атм и сильный парниковый эффект. Реально там около 460 °C, наша упрощённая формула занижает.",
+        img: "images/Venus.jpg" },
     titan: { star: "yellow", dist: 9.54, moon: false, ocean: 0, pressure: 1.45, o2: 0, g: 0.14, mag: false, rad: 1,
         note: "Плотная азотная атмосфера, но вместо воды на поверхности жидкий метан, поэтому океанов воды здесь нет." },
     ganymede: { star: "yellow", dist: 5.2, moon: false, ocean: 0, pressure: 0, o2: 0, g: 0.146, mag: true, rad: 10,
-        note: "Океан есть только под ледяной корой, на поверхности воды нет. Своё магнитное поле есть, но радиация Юпитера огромна (ползунок ограничен 10×, реально намного выше)." },
+        note: "Океан есть только под ледяной корой, на поверхности воды нет. Своё магнитное поле есть, но радиация Юпитера огромна (ползунок ограничен 10×, реально намного выше).",
+        img: "images/Ganymede.jpg" },
     trappist: { star: "ultracool", dist: 0.029, moon: false, ocean: 70, pressure: 2, o2: 0, g: 0.93, mag: true, rad: 1,
         note: "Гипотетический сценарий: атмосфера у планеты не подтверждена. Взята плотная атмосфера (около 2 атм) без кислорода, как у планеты без жизни." },
 
     coruscant: { star: "yellow", dist: 1, moon: true, ocean: 0, pressure: 1, o2: 21, g: 1, mag: true, rad: 1,
-        note: "Планета-город с земной атмосферой и стандартной гравитацией." + FICTION_NOTE },
+        note: "Планета-город с земной атмосферой и стандартной гравитацией." + FICTION_NOTE,
+        img: "images/Coruscant.webp" },
     tatooine: { star: "yellow", dist: 0.7, moon: true, ocean: 1, pressure: 1, o2: 21, g: 1, mag: true, rad: 1,
-        note: "Пустыня с почти нулевым запасом воды. На самом деле у Татуина две звезды, здесь одна жёлтая, поэтому жара задана через близкую орбиту." + FICTION_NOTE },
+        note: "Пустыня с почти нулевым запасом воды. На самом деле у Татуина две звезды, здесь одна жёлтая, поэтому жара задана через близкую орбиту." + FICTION_NOTE,
+        img: "images/tatooine.webp" },
     terra: { star: "yellow", dist: 1, moon: true, ocean: 10, pressure: 1, o2: 17, g: 1, mag: true, rad: 3,
-        note: "Земля далёкого будущего: загрязнённая атмосфера, осушенные океаны, ослабленная защита от радиации." + FICTION_NOTE },
+        note: "Земля далёкого будущего: загрязнённая атмосфера, осушенные океаны, ослабленная защита от радиации." + FICTION_NOTE,
+        img: "images/Terra.webp" },
     cadia: { star: "yellow", dist: 1, moon: false, ocean: 40, pressure: 1, o2: 21, g: 1, mag: true, rad: 1,
-        note: "Умеренный землеподобный мир (до разрушения)." + FICTION_NOTE }
+        note: "Умеренный землеподобный мир (до разрушения)." + FICTION_NOTE,
+        img: "images/Cadia.webp" }
 };
+
+function hidePlanetImage() {
+    planetImage.onload = null;
+    planetImage.onerror = null;
+    planetImage.hidden = true;
+    planetImage.removeAttribute("src");
+    planetImage.alt = "";
+    planetVisual.style.display = "block";
+}
+
+function showPlanetImage(src, alt) {
+    planetImage.onload = null;
+    planetImage.onerror = null;
+    planetImage.hidden = true;
+    planetImage.alt = alt;
+    planetImage.onload = () => {
+        if (planetImage.getAttribute("src") !== src) return;
+        planetImage.hidden = false;
+        planetVisual.style.display = "none";
+    };
+    planetImage.onerror = () => {
+        if (planetImage.getAttribute("src") !== src) return;
+        console.warn("Не удалось загрузить изображение:", src);
+        hidePlanetImage();
+    };
+    planetImage.src = src;
+    if (planetImage.complete && planetImage.naturalWidth > 0) {
+        planetImage.hidden = false;
+        planetVisual.style.display = "none";
+    }
+}
 
 function applyPreset(key) {
     const p = PRESETS[key];
     if (!p) {
+        // Свой вариант — показываем цветной круг
         presetNote.textContent = "";
+        hidePlanetImage();
+        updateAll();
         return;
     }
+
     starSelect.value = p.star;
     distanceSlider.value = sliderFromDistance(p.dist);
     moonCheck.checked = p.moon;
@@ -109,6 +154,14 @@ function applyPreset(key) {
     magneticCheck.checked = p.mag;
     radiationSlider.value = p.rad * 10;
     presetNote.textContent = p.note;
+
+    // Показываем картинку, если она есть
+    if (p.img) {
+        showPlanetImage(p.img, key);
+    } else {
+        hidePlanetImage();
+    }
+
     updateAll();
 }
 
@@ -296,6 +349,7 @@ function updateAll() {
 function onManualChange() {
     presetSelect.value = "";
     presetNote.textContent = "";
+    hidePlanetImage();
     updateAll();
 }
 

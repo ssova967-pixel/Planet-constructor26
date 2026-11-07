@@ -60,6 +60,22 @@ input[type="range"] {
     transition: background 0.4s, box-shadow 0.4s;
 }
 
+.planet-image {
+    display: block;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 15px auto;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* display: block выше перекрывает атрибут hidden, без !important картинка не скрывается */
+.planet-image[hidden] {
+    display: none !important;
+}
+
 .score {
     font-size: 1.4rem;
     text-align: center;
